@@ -169,6 +169,9 @@
                     <includes>
                         <include>%regex[.*]</include>
                     </includes>
+                    <excludes>
+                        <exclude>%regex[.*.cql]</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
