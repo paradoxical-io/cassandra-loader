@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <prerequisites>
         <maven>3.0.0</maven>
     </prerequisites>
-
     <groupId>io.paradoxical</groupId>
     <artifactId>cassandra.loader</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
     <name>cassandra-loader</name>
     <url>http://maven.apache.org</url>
-
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -23,7 +17,6 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-
     <properties>
         <slf4j.version>1.7.10</slf4j.version>
         <lombok.version>1.16.2</lombok.version>
@@ -42,17 +35,12 @@
         <godaddy.logging.version>1.0</godaddy.logging.version>
         <podam.version>4.7.2.RELEASE</podam.version>
     </properties>
-
     <scm>
-        <connection>
-            scm:git:git@github.com:paradoxical-io/cassandra-loader.git
+        <connection>scm:git:git@github.com:paradoxical-io/cassandra-loader.git
         </connection>
-        <developerConnection>
-            scm:git:git@github.com:paradoxical-io/cassandra-loader.git
+        <developerConnection>scm:git:git@github.com:paradoxical-io/cassandra-loader.git
         </developerConnection>
     </scm>
-
-
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -63,14 +51,12 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
     </distributionManagement>
-
     <dependencies>
         <dependency>
             <groupId>com.datastax.cassandra</groupId>
             <artifactId>cassandra-driver-core</artifactId>
             <version>2.1.5</version>
         </dependency>
-
         <dependency>
             <groupId>org.cassandraunit</groupId>
             <artifactId>cassandra-unit</artifactId>
@@ -82,20 +68,17 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <dependency>
             <groupId>uk.co.jemos.podam</groupId>
             <artifactId>podam</artifactId>
             <version>${podam.version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>commons-cli</groupId>
             <artifactId>commons-cli</artifactId>
             <version>1.3</version>
         </dependency>
-
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
@@ -151,7 +134,6 @@
             <version>${junit.version}</version>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -273,7 +255,6 @@
             </plugin>
         </plugins>
     </build>
-
     <profiles>
         <profile>
             <id>sign</id>
@@ -316,12 +297,11 @@
                                 </goals>
                                 <configuration>
                                     <createDependencyReducedPom>true</createDependencyReducedPom>
-                                    <finalName>${project.artifactId}-exe</finalName>
+                                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                                    <shadedClassifierName>runner</shadedClassifierName>
                                     <transformers>
-                                        <transformer
-                                                implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                                        <transformer
-                                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                             <mainClass>io.paradoxical.cassandra.loader.Main</mainClass>
                                         </transformer>
                                     </transformers>
@@ -333,5 +313,4 @@
             </build>
         </profile>
     </profiles>
-
 </project>
