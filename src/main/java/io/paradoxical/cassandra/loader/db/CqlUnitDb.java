@@ -133,22 +133,7 @@ public class CqlUnitDb {
         if (session == null) {
             synchronized (sync) {
                 if (session == null) {
-
-                    LocalCql db = new LocalCql();
-
-                    db.startDb();
-
-                    DbRunnerConfig dbRunnerConfig = DbRunnerConfig.builder()
-                                                                  .filePath(filePath)
-                                                                  .recreateDatabase(true)
-                                                                  .build();
-
-                    DbScriptsRunner dbScriptsRunner = new DbScriptsRunner(dbRunnerConfig);
-
-                    dbScriptsRunner.run(db.session);
-
-                    session = db.session;
-
+                    session = unCached(filePath);
                 }
             }
         }
@@ -162,5 +147,22 @@ public class CqlUnitDb {
         }
 
         return create(filePath);
+    }
+
+    public static Session unCached(String filePath) throws Exception {
+        LocalCql db = new LocalCql();
+
+        db.startDb();
+
+        DbRunnerConfig dbRunnerConfig = DbRunnerConfig.builder()
+                                                      .filePath(filePath)
+                                                      .recreateDatabase(true)
+                                                      .build();
+
+        DbScriptsRunner dbScriptsRunner = new DbScriptsRunner(dbRunnerConfig);
+
+        dbScriptsRunner.run(db.session);
+
+        return db.session;
     }
 }

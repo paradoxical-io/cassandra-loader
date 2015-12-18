@@ -1,6 +1,6 @@
 package io.paradoxical.cassandra.loader;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cassandraunit.dataset.ParseException;
 import org.cassandraunit.dataset.cql.AbstractCQLDataSet;
 
