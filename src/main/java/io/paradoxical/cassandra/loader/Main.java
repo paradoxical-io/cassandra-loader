@@ -25,7 +25,6 @@ public class Main {
         Options options = getOptions();
 
         try {
-
             CommandLine line = parser.parse(options, args);
 
             configureLogging(line.hasOption("debug"));
