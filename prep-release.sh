@@ -1,1 +1,1 @@
-mvn release:prepare gpg:sign -s settings.xml
+mvn release:prepare -s settings.xml
