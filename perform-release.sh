@@ -1,0 +1,1 @@
+maven release:perform gpg:sign -s settings.xml
