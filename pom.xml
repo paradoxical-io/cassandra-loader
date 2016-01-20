@@ -6,7 +6,7 @@
     </prerequisites>
     <groupId>io.paradoxical</groupId>
     <artifactId>cassandra.loader</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
     <description>A version loader for CQL scripts</description>
     <name>cassandra-loader</name>
@@ -42,7 +42,8 @@
         </connection>
         <developerConnection>scm:git:git@github.com:paradoxical-io/cassandra-loader.git
         </developerConnection>
-    </scm>
+      <tag>cassandra.loader-1.0</tag>
+  </scm>
      <developers>
         <developer>
             <id>devshorts</id>
@@ -317,7 +318,7 @@
                                     <shadedArtifactAttached>true</shadedArtifactAttached>
                                     <shadedClassifierName>runner</shadedClassifierName>
                                     <transformers>
-                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
                                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                             <mainClass>io.paradoxical.cassandra.loader.Main</mainClass>
                                         </transformer>
