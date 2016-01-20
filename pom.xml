@@ -36,11 +36,22 @@
         <podam.version>4.7.2.RELEASE</podam.version>
     </properties>
     <scm>
+        <url>http://github.com/paradoxical-io/cassandra-loader</url>
         <connection>scm:git:git@github.com:paradoxical-io/cassandra-loader.git
         </connection>
         <developerConnection>scm:git:git@github.com:paradoxical-io/cassandra-loader.git
         </developerConnection>
     </scm>
+     <developers>
+        <developer>
+            <id>devshorts</id>
+            <name>Anton Kropp</name>
+        </developer>
+        <developer>
+            <id>jakeswenson</id>
+            <name>Jake Swenson</name>
+        </developer>
+    </developers>
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
