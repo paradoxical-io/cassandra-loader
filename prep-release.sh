@@ -1,1 +1,1 @@
-mvn release:prepare verify gpg:sign -s settings.xml
+mvn release:prepare -P sign -s settings.xml
