@@ -67,7 +67,7 @@ To install:
 </dependency>
 ```
 
-Or pull it directly from maven.
+Or pull it [directly from maven)(https://repo1.maven.org/maven2/io/paradoxical/cassandra.loader/1.1/cassandra.loader-1.1-runner.jar).
 
 To use it:
 
