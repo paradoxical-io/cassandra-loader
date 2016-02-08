@@ -6,7 +6,7 @@
     </prerequisites>
     <groupId>io.paradoxical</groupId>
     <artifactId>cassandra.loader</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
     <description>A version loader for CQL scripts</description>
     <name>cassandra-loader</name>
@@ -42,7 +42,7 @@
         </connection>
         <developerConnection>scm:git:git@github.com:paradoxical-io/cassandra-loader.git
         </developerConnection>
-      <tag>HEAD</tag>
+      <tag>cassandra.loader-1.2</tag>
   </scm>
      <developers>
         <developer>
