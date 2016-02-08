@@ -1,6 +1,7 @@
 package io.paradoxical.cassandra.loader;
 
 import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.LocalDate;
 import com.datastax.driver.core.PlainTextAuthProvider;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
@@ -157,7 +158,12 @@ public class DbScriptsRunner {
             return 0;
         }
 
-        Comparator<Row> rowComparator = (row1, row2) -> row1.getDate("updated_date").compareTo(row2.getDate("updated_date"));
+        Comparator<Row> rowComparator = (row1, row2) -> {
+            final LocalDate updated_date = row1.getDate("updated_date");
+            final LocalDate updated_date2 = row2.getDate("updated_date");
+
+            return Long.valueOf(updated_date.getMillisSinceEpoch()).compareTo(updated_date2.getMillisSinceEpoch());
+        };
 
         List<Row> rowsSorted = rows.stream().sorted(rowComparator).collect(toList());
 
