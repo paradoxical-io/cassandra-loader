@@ -83,7 +83,7 @@ public class Main {
 
         options.addOption(Option.builder("createKeyspace")
                                 .required(false)
-                                .desc("Creates a basic keyspace")
+                                .desc("Creates the keyspace")
                                 .build());
 
         options.addOption(Option.builder("p")

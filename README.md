@@ -76,15 +76,16 @@ To use it:
 > java -jar cassandra.loader-runner.jar
 
 Unexpected exception:Missing required options: ip, u, pw, k
-usage: Main
+Usage: Main
+ -createKeyspace              Creates the keyspace
+ --debug                      Optional debug flag. Spits out all logs
  -f,--file-path <arg>         CQL File Path (default =
                               ../db/src/main/resources)
  -ip <arg>                    Cassandra IP Address
  -k,--keyspace <arg>          Cassandra Keyspace
  -p,--port <arg>              Cassandra Port (default = 9042)
  -pw,--password <arg>         Cassandra Password
- -recreateDatabase            Deletes all tables. WARNING all
-                              data will be deleted! 
+ -recreateDatabase            Deletes all tables. WARNING all data will be
+                              deleted!
  -u,--username <arg>          Cassandra Username
  -v,--upgrade-version <arg>   Upgrade to Version
-``` 
