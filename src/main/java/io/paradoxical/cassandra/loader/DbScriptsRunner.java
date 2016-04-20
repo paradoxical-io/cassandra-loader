@@ -12,10 +12,7 @@ import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.FileCQLDataSet;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -159,10 +156,10 @@ public class DbScriptsRunner {
         }
 
         Comparator<Row> rowComparator = (row1, row2) -> {
-            final LocalDate updated_date = row1.getDate("updated_date");
-            final LocalDate updated_date2 = row2.getDate("updated_date");
+            final Date updated_date = row1.getTimestamp("updated_date");
+            final Date updated_date2 = row2.getTimestamp("updated_date");
 
-            return Long.valueOf(updated_date.getMillisSinceEpoch()).compareTo(updated_date2.getMillisSinceEpoch());
+            return updated_date.compareTo(updated_date2);
         };
 
         List<Row> rowsSorted = rows.stream().sorted(rowComparator).collect(toList());
