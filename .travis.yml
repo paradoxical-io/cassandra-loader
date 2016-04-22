@@ -5,7 +5,7 @@ sudo: false
 cache:
   directories:
   - $HOME/.m2
-deploy:
+after_success:
 - 'git submodule init && git submodule update && ./deployment/deploy.sh'
 env:
   global:
