@@ -28,7 +28,7 @@ public class TestDbScripts {
         DbRunnerConfig dbRunnerConfig = DbRunnerConfig.builder()
                                                       .dbVersion(1)
                                                       .filePath("src/test/resources/init")
-                                                      .recreateDatabase(false)
+                                                      .recreateDatabase(true)
                                                       .build();
 
         DbScriptsRunner dbScriptsRunner = new DbScriptsRunner(dbRunnerConfig);
