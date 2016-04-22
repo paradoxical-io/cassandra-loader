@@ -1,0 +1,1 @@
+ALTER TABLE request_status ADD test_column2 text;

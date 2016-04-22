@@ -11,11 +11,11 @@ import org.junit.Test;
 
 import java.util.UUID;
 
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestDbScripts {
-
-
     private static Session session;
 
     @BeforeClass
@@ -25,12 +25,10 @@ public class TestDbScripts {
 
     @Test
     public void test_runner() throws Exception {
-
-
         DbRunnerConfig dbRunnerConfig = DbRunnerConfig.builder()
                                                       .dbVersion(1)
-                                                      .filePath("src/test/resources")
-                                                      .recreateDatabase(false)
+                                                      .filePath("src/test/resources/init")
+                                                      .recreateDatabase(true)
                                                       .build();
 
         DbScriptsRunner dbScriptsRunner = new DbScriptsRunner(dbRunnerConfig);
@@ -54,19 +52,59 @@ public class TestDbScripts {
 
     }
 
+    @Test
+    public void test_upgrade() throws Exception {
+        DbRunnerConfig dbRunnerConfig = DbRunnerConfig.builder()
+                                                      .dbVersion(2)
+                                                      .filePath("src/test/resources/migrate")
+                                                      .recreateDatabase(true)
+                                                      .build();
+
+        DbScriptsRunner dbScriptsRunner = new DbScriptsRunner(dbRunnerConfig);
+
+        dbScriptsRunner.run(session);
+
+        DbRunnerConfig upgradeConfig = DbRunnerConfig.builder()
+                                                     .dbVersion(3)
+                                                     .keyspace(dbScriptsRunner.getKeyspace(session))
+                                                     .filePath("src/test/resources/migrate")
+                                                     .recreateDatabase(false)
+                                                     .build();
+
+        new DbScriptsRunner(upgradeConfig).run(session);
+
+        assertTrue(session.execute("select * from db_version")
+                          .all()
+                          .stream()
+                          .map(row -> row.getInt("version"))
+                          .collect(toList())
+                          .contains(3));
+
+        UUID tracking_id = UUID.randomUUID();
+        String test_column_value = "foobar";
+
+        session.execute("insert into request_status(tracking_id, callback_routing_key, test_column) " +
+                        "values (" + tracking_id + ", 'test_callback_routing_key', '" + test_column_value + "')");
+
+        Row row = session.execute("select * from request_status").one();
+        assertEquals(row.getUUID("tracking_id"), tracking_id);
+        assertEquals(row.getString("callback_routing_key"), "test_callback_routing_key");
+        assertEquals(row.getString("test_column"), test_column_value);
+    }
+
     @Test(expected = InvalidQueryException.class)
     public void test_drop_tables() throws Exception {
 
         DbRunnerConfig dbRunnerConfig = DbRunnerConfig.builder()
                                                       .dbVersion(1)
-                                                      .filePath("src/test/resources")
+                                                      .filePath("src/test/resources/init")
                                                       .recreateDatabase(true)
                                                       .build();
 
         session.execute("CREATE TABLE table_to_drop ( " +
-                                "    drop_id int PRIMARY KEY, " +
-                                "    drop_date timestamp " +
-                                ")");
+                        "    drop_id int PRIMARY KEY, " +
+                        "    drop_date timestamp " +
+                        ")");
 
         assertEquals(session.execute("SELECT * FROM TABLE_TO_DROP").all(), Lists.newArrayList());
 
