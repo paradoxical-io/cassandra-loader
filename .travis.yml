@@ -6,7 +6,7 @@ cache:
   directories:
   - $HOME/.m2
 deploy:
-- git submodule init && git submodule update && ./deployment/deploy.sh
+- 'git submodule init && git submodule update && ./deployment/deploy.sh'
 env:
   global:
   - secure: Iq+MC9wbyPt0bJ2/D739S+gwgf+U1gtMwhk6vUFAKeuKP0tTvcltO8dPBzTjunY6zoSF2nU4na03jr6/4FG6q/fqpIZPSJONjqFXQa7ZRs+3TWYYHofwEdr7WHSKo9KhJO7o30f+ufENftpDimgqZxa+oAl/2ujDAyB2CrIyif3pTIrI+A/EJKcLiLvCY42ZR8DVyXyR/yA+KNccAQT1kAX4Ua4m/nh/XZcnexGd3QyoyzZZGkZs1nPZaEaeBpIa4f/bxm8sfqR4f6/o2tJKzCsIJPXSQ6Pj6ySuTpS92RwIlCsVkc8SmnhNSB5hEmddbEMFDxcts1E/iueqKaU6Vm4Jkc94y8iz2WsBeTuKoeThrI/kfsNSPoF2tS/XycOFACqi2L86o/k9CM0RrmfeS8RW9qerXy/RQb4zrbc85ZFNFOMADeEhSp+lSPtH65T6EJ3TdRFGznc090B+d1VLQ0i2Y3GE9Qx6U0DC+zZ0c/rBmnbDa16ELNHorFkEIT7B/w0eF9RPrjf83KECEDdM9rfW2o/jXve9DUmexUfFsW3dCjMwzepN71ATXc/c3rvlX1qEDL5b7kcSi9xXHet+oCcY57iCuwR0Iam1NH/LWg+q/YzLntSQvk9goFyNJ8DL0MigIQvmOYsYmGkCTta2MlbyVXVWo/oSnOqr4Fme2R0=
