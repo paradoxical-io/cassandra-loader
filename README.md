@@ -1,7 +1,7 @@
 cassandra-loader
 ========================
 
-![Build status](https://travis-ci.org/paradoxical-io/cassandra-loader.svg?branch=master)
+[![Build Status](https://travis-ci.org/paradoxical-io/cassandra-loader.svg?branch=master)](https://travis-ci.org/paradoxical-io/cassandra-loader)
 [![Maven Central](https://img.shields.io/maven-central/v/io.paradoxical/cassandra.loader.svg?maxAge=2592000)](https://github.com/paradoxical-io/cassandra-loader/releases)
 
 This is a simple cassandra migration runner. It will manage your cassandra keyspace versions by keeping track of a 
