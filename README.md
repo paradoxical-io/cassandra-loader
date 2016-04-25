@@ -62,7 +62,7 @@ To install:
 <dependency>
     <groupId>io.paradoxical</groupId>
     <artifactId>cassandra.loader</artifactId>
-    <version>1.1</version>
+    <version>1.3</version>
     <classifier>runner</classifier>
 </dependency>
 ```
