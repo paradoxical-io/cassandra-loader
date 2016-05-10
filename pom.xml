@@ -256,6 +256,32 @@
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <version>${maven.shade.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>shade</goal>
+                                </goals>
+                                <configuration>
+                                    <createDependencyReducedPom>true</createDependencyReducedPom>
+                                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                                    <shadedClassifierName>runner</shadedClassifierName>
+                                    <transformers>
+                                        <transformer
+                                                implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                        <transformer
+                                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                            <mainClass>io.paradoxical.cassandra.loader.Main</mainClass>
+                                        </transformer>
+                                    </transformers>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>2.9.1</version>
                         <executions>
@@ -303,39 +329,6 @@
                             <publicKeyring>${project.basedir}/deployment/gpg/paradoxical-io.pubgpg</publicKeyring>
                             <secretKeyring>${project.basedir}/deployment/gpg/paradoxical-io-private.gpg</secretKeyring>
                         </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>shade</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-shade-plugin</artifactId>
-                        <version>${maven.shade.version}</version>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>shade</goal>
-                                </goals>
-                                <configuration>
-                                    <createDependencyReducedPom>true</createDependencyReducedPom>
-                                    <shadedArtifactAttached>true</shadedArtifactAttached>
-                                    <shadedClassifierName>runner</shadedClassifierName>
-                                    <transformers>
-                                        <transformer
-                                                implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                                        <transformer
-                                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                            <mainClass>io.paradoxical.cassandra.loader.Main</mainClass>
-                                        </transformer>
-                                    </transformers>
-                                </configuration>
-                            </execution>
-                        </executions>
                     </plugin>
                 </plugins>
             </build>
