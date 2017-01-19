@@ -19,6 +19,8 @@ public class Main {
 
     private static final int DEFAULT_PORT = 9042;
 
+    private static final String DEFAULT_REPLICATION_MAP = "{ 'class' : 'SimpleStrategy', 'replication_factor' : 1 }";
+
     public static void main(String[] args) throws Exception {
         CommandLineParser parser = new DefaultParser();
 
@@ -86,6 +88,13 @@ public class Main {
                                 .desc("Creates the keyspace")
                                 .build());
 
+        options.addOption(Option.builder("rm")
+                                .longOpt("replicationMap")
+                                .required(false)
+                                .hasArg(true)
+                                .desc("Replication map for use w/ createKeyspace (default = " + DEFAULT_REPLICATION_MAP + ")")
+                                .build());
+
         options.addOption(Option.builder("p")
                                 .longOpt("port")
                                 .required(false)
@@ -150,12 +159,14 @@ public class Main {
 
         String username = line.getOptionValue("u");
         String password = line.getOptionValue("pw");
+        String replicationMap = line.hasOption("replicationMap") ? line.getOptionValue("replicationMap") : DEFAULT_REPLICATION_MAP;
 
         dbConfigBuilder.ip(line.getOptionValue("ip"))
                        .port(line.hasOption("p") ? Integer.valueOf(line.getOptionValue("p")) : DEFAULT_PORT)
                        .username(username != null ? username : "")
                        .password(password != null ? password : "")
                        .createKeyspace(line.hasOption("createKeyspace"))
+                       .replicationMap(replicationMap)
                        .keyspace(line.getOptionValue("k"))
                        .dbVersion(line.hasOption("v") ? Integer.valueOf(line.getOptionValue("v")) : null)
                        .filePath(line.hasOption("f") ? line.getOptionValue("f") : DEFAULT_CQL_PATH)
