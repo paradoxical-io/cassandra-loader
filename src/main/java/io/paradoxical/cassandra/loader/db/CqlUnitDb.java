@@ -29,6 +29,10 @@ class LocalCql extends CassandraCQLUnit {
   }
 
   public void startDb() throws Exception {
+    startDb(20000);
+  }
+
+  public void startDb(long timeout) throws Exception {
     prepConfigFile();
 
     Exception exception = null;
@@ -37,15 +41,20 @@ class LocalCql extends CassandraCQLUnit {
 
       try {
         EmbeddedCassandraServerHelper.startEmbeddedCassandra(new File(tmp_folder + custom_file),
-//      EmbeddedCassandraServerHelper.startEmbeddedCassandra(EmbeddedCassandraServerHelper.CASSANDRA_RNDPORT_YML_FILE,
+                                                             //      EmbeddedCassandraServerHelper
+                                                             // .startEmbeddedCassandra(EmbeddedCassandraServerHelper
+                                                             // .CASSANDRA_RNDPORT_YML_FILE,
                                                              "target/embeddedCassandra",
-                                                             10000);
+                                                             timeout);
 
         this.load();
 
         return;
       }
       catch (Exception ex) {
+        if (exception != null) {
+          ex.addSuppressed(exception);
+        }
         exception = ex;
       }
     }
