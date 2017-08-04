@@ -6,11 +6,11 @@
     <parent>
         <groupId>io.paradoxical</groupId>
         <artifactId>deployment-base-pom</artifactId>
-        <version>1.0</version>
+        <version>1.1</version>
     </parent>
 
     <artifactId>cassandra.loader</artifactId>
-    <version>1.6${revision}</version>
+    <version>1.6.1${revision}</version>
     <packaging>jar</packaging>
     <description>A version loader for CQL scripts</description>
     <name>cassandra-loader</name>
@@ -270,10 +270,8 @@
                                     <shadedArtifactAttached>true</shadedArtifactAttached>
                                     <shadedClassifierName>runner</shadedClassifierName>
                                     <transformers>
-                                        <transformer
-                                                implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                                        <transformer
-                                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                             <mainClass>io.paradoxical.cassandra.loader.Main</mainClass>
                                         </transformer>
                                     </transformers>
