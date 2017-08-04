@@ -174,16 +174,13 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven.surefire.plugin.version}</version>
                 <configuration>
-                    <!--the -XX:-UseSplitVerifier option slows class loading.
-                     It does not affect security, runtime performance or functionality.
-                     http://stackoverflow.com/questions/15253173/how-safe-is-it-to-use-xx-usesplitverifier -->
-                    <argLine>-XX:-UseSplitVerifier</argLine>
                     <includes>
                         <include>%regex[.*]</include>
                     </includes>
                     <excludes>
                         <exclude>%regex[.*.cql]</exclude>
                     </excludes>
+                    <workingDirectory>${project.basedir}</workingDirectory>
                 </configuration>
             </plugin>
             <plugin>
