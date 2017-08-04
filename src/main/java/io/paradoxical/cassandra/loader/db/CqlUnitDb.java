@@ -18,151 +18,155 @@ import java.io.OutputStream;
 import java.util.Random;
 
 class LocalCql extends CassandraCQLUnit {
-    public static final String custom_file = "/pre-test-cassandra.yml";
+  public static final String custom_file = "/pre-test-cassandra.yml";
 
-    public static final String tmp_folder = "target/test-cassandra";
+  public static final String tmp_folder = "target/test-cassandra";
 
-    private static int clientPort = new Random().nextInt(1000) + 30000;
+  private static int clientPort = new Random().nextInt(1000) + 30000;
 
-    public LocalCql() {
-        super(null);
+  public LocalCql() {
+    super(null);
+  }
+
+  public void startDb() throws Exception {
+    prepConfigFile();
+
+    Exception exception = null;
+
+    for (int retries = 0; retries < 3; retries++) {
+
+      try {
+        EmbeddedCassandraServerHelper.startEmbeddedCassandra(new File(tmp_folder + custom_file),
+//      EmbeddedCassandraServerHelper.startEmbeddedCassandra(EmbeddedCassandraServerHelper.CASSANDRA_RNDPORT_YML_FILE,
+                                                             "target/embeddedCassandra",
+                                                             10000);
+
+        this.load();
+
+        return;
+      }
+      catch (Exception ex) {
+        exception = ex;
+      }
     }
 
-    public void startDb() throws Exception {
-        prepConfigFile();
+    throw exception;
+  }
 
-        Exception exception = null;
+  @Override
+  protected void load() {
+    cluster = new Cluster.Builder().addContactPoints("127.0.0.1").withPort(clientPort).build();
+    session = cluster.connect();
+    CQLDataLoader dataLoader = new CQLDataLoader(session);
+    dataLoader.load(new EmptyCqlDataSet(null, true, true));
+    session = dataLoader.getSession();
+  }
 
-        for (int retries = 0; retries < 3; retries++) {
+  private void prepConfigFile() throws IOException {
+    rmdir(tmp_folder);
 
-            try {
-                EmbeddedCassandraServerHelper.startEmbeddedCassandra(new File(tmp_folder + custom_file), "target/embeddedCassandra", 10000);
+    mkdir(tmp_folder);
 
-                this.load();
+    copy(custom_file, tmp_folder);
 
-                return;
-            }
-            catch (Exception ex) {
-                exception = ex;
-            }
-        }
+    File file = new File(tmp_folder + custom_file);
 
-        throw exception;
+    String s = org.apache.commons.io.FileUtils.readFileToString(file);
+
+    s = randomPort(s, "--STORAGE-PORT--");
+
+    s = randomPort(s, "--THRIFT-PORT--");
+
+    s = setPort(s, "--CLIENT-PORT--", clientPort);
+
+    org.apache.commons.io.FileUtils.writeStringToFile(file, s);
+  }
+
+  private static void rmdir(String dir) throws IOException {
+    File dirFile = new File(dir);
+    if (dirFile.exists()) {
+      FileUtils.deleteRecursive(new File(dir));
     }
+  }
 
-    @Override protected void load() {
-        cluster = new Cluster.Builder().addContactPoints("127.0.0.1").withPort(clientPort).build();
-        session = cluster.connect();
-        CQLDataLoader dataLoader = new CQLDataLoader(session);
-        dataLoader.load(new EmptyCqlDataSet(null, true, true));
-        session = dataLoader.getSession();
+  private static String randomPort(String source, String key) {
+    return setPort(source, key, new Random().nextInt(1000) + 30000);
+  }
+
+  private static String setPort(String source, String key, int port) {
+    return source.replace(key, String.valueOf(port));
+  }
+
+
+  /**
+   * Creates a directory
+   *
+   * @param dir
+   * @throws IOException
+   */
+  private static void mkdir(String dir) throws IOException {
+    FileUtils.createDirectory(dir);
+  }
+
+  private static void copy(String resource, String directory) throws IOException {
+    mkdir(directory);
+    String fileName = resource.substring(resource.lastIndexOf("/") + 1);
+    File file = new File(directory + System.getProperty("file.separator") + fileName);
+    try (
+        InputStream is = CqlUnitDb.class.getResourceAsStream(resource);
+        OutputStream out = new FileOutputStream(file)
+    ) {
+      byte buf[] = new byte[1024];
+      int len;
+      while ((len = is.read(buf)) > 0) {
+        out.write(buf, 0, len);
+      }
+      out.close();
     }
-
-    private void prepConfigFile() throws IOException {
-        rmdir(tmp_folder);
-
-        mkdir(tmp_folder);
-
-        copy(custom_file, tmp_folder);
-
-        File file = new File(tmp_folder + custom_file);
-
-        String s = org.apache.commons.io.FileUtils.readFileToString(file);
-
-        s = randomPort(s, "--STORAGE-PORT--");
-
-        s = randomPort(s, "--THRIFT-PORT--");
-
-        s = setPort(s, "--CLIENT-PORT--", clientPort);
-
-        org.apache.commons.io.FileUtils.writeStringToFile(file, s);
-    }
-
-    private static void rmdir(String dir) throws IOException {
-        File dirFile = new File(dir);
-        if (dirFile.exists()) {
-            FileUtils.deleteRecursive(new File(dir));
-        }
-    }
-
-    private static String randomPort(String source, String key) {
-        return setPort(source, key, new Random().nextInt(1000) + 30000);
-    }
-
-    private static String setPort(String source, String key, int port) {
-        return source.replace(key, String.valueOf(port));
-    }
-
-
-    /**
-     * Creates a directory
-     *
-     * @param dir
-     * @throws IOException
-     */
-    private static void mkdir(String dir) throws IOException {
-        FileUtils.createDirectory(dir);
-    }
-
-    private static void copy(String resource, String directory) throws IOException {
-        mkdir(directory);
-        String fileName = resource.substring(resource.lastIndexOf("/") + 1);
-        File file = new File(directory + System.getProperty("file.separator") + fileName);
-        try (
-                InputStream is = CqlUnitDb.class.getResourceAsStream(resource);
-                OutputStream out = new FileOutputStream(file)
-        ) {
-            byte buf[] = new byte[1024];
-            int len;
-            while ((len = is.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            out.close();
-        }
-    }
+  }
 }
 
 public class CqlUnitDb {
 
-    private static Session session;
+  private static Session session;
 
-    private static final Object sync = new Object();
+  private static final Object sync = new Object();
 
-    public static Session create(String filePath) throws Exception {
+  public static Session create(String filePath) throws Exception {
 
+    if (session == null) {
+      synchronized (sync) {
         if (session == null) {
-            synchronized (sync) {
-                if (session == null) {
-                    session = unCached(filePath);
-                }
-            }
+          session = unCached(filePath);
         }
-
-        return session;
+      }
     }
 
-    public static Session reset(String filePath) throws Exception {
-        synchronized (sync) {
-            session = null;
-        }
+    return session;
+  }
 
-        return create(filePath);
+  public static Session reset(String filePath) throws Exception {
+    synchronized (sync) {
+      session = null;
     }
 
-    public static Session unCached(String filePath) throws Exception {
-        LocalCql db = new LocalCql();
+    return create(filePath);
+  }
 
-        db.startDb();
+  public static Session unCached(String filePath) throws Exception {
+    LocalCql db = new LocalCql();
 
-        DbRunnerConfig dbRunnerConfig = DbRunnerConfig.builder()
-                                                      .filePath(filePath)
-                                                      .recreateDatabase(true)
-                                                      .build();
+    db.startDb();
 
-        DbScriptsRunner dbScriptsRunner = new DbScriptsRunner(dbRunnerConfig);
+    DbRunnerConfig dbRunnerConfig = DbRunnerConfig.builder()
+                                                  .filePath(filePath)
+                                                  .recreateDatabase(true)
+                                                  .build();
 
-        dbScriptsRunner.run(db.session);
+    DbScriptsRunner dbScriptsRunner = new DbScriptsRunner(dbRunnerConfig);
 
-        return db.session;
-    }
+    dbScriptsRunner.run(db.session);
+
+    return db.session;
+  }
 }

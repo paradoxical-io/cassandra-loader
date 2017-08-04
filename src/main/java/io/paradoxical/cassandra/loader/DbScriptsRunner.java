@@ -90,11 +90,11 @@ public class DbScriptsRunner {
 
     private void dropTables(Session keyspaceSession, String keyspace) {
         logger.info("Dropping all tables from keyspace = " + keyspace + ".");
-        List<Row> tables = keyspaceSession.execute("SELECT columnfamily_name FROM system.schema_columnfamilies WHERE keyspace_name = '" + keyspace + "';").all();
+        List<Row> tables = keyspaceSession.execute("SELECT table_name FROM system_schema.tables WHERE keyspace_name = '" + keyspace + "';").all();
 
         for (Row row : tables) {
-            logger.info("Dropping table " + row.getString("columnfamily_name") + ".");
-            keyspaceSession.execute("DROP TABLE " + row.getString("columnfamily_name"));
+            logger.info("Dropping table " + row.getString("table_name") + ".");
+            keyspaceSession.execute("DROP TABLE " + row.getString("table_name"));
         }
     }
 

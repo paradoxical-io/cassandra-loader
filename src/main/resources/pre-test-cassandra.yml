@@ -37,6 +37,8 @@ hinted_handoff_throttle_in_kb: 1024
 # Consider increasing this number when you have multi-dc deployments, since
 # cross-dc handoff tends to be slower
 max_hints_delivery_threads: 2
+hints_directory: target/embeddedCassandra/hints
+cdc_raw_directory: target/embeddedCassandra/cdc
 
 # The following setting populates the page cache on memtable flush and compaction
 # WARNING: Enable this setting only when the whole node's data fits in memory.
